@@ -1,4 +1,4 @@
-//in ascii en: A = 65 Z = 90 a = 97 z = 122  ru: À = -64 à = -32 ¨ = -88 ß = -33 ÿ = -1 ¸= -72
+//in ascii en: A = 65 Z = 90 a = 97 z = 122  ru: À = -64 à = -32 ~ = -88 Z = -33 z = -1 `= -72
 #include <iostream>
 #include <string>
 #include <windows.h>
@@ -30,7 +30,7 @@ string ceasarRu(string cRu) {
 	//string alphabetRu = "ÀÁÂÃÄÅ¨ÆÇÈÉÊËÌÍÎÏĞÑÒÓÔÕÖ×ØÙÚÛÜİŞßàáâãäå¸æçèéêëìíîïğñòóôõö÷øùúûüışÿ"; //RuAlphabet for cryption
 
 	int i = 0, keyRu;//text position counter
-	char;
+	
 	cout << "input key for ceasar: ";
 	cin >> keyRu; //key for ceasarRu
 
@@ -46,7 +46,7 @@ string ceasarRu(string cRu) {
 		}
 		i++;
 
-		/*posInRu = -1;  //test version if RuCeasar
+		/*posInRu = -1;  //test version of RuCeasar
 		for (int t = 0; t < 66; t++) { //search for a value in the Ru alphabet
 			if (cRu[i] == alphabetRu[t]) {
 				posInRu = t;
