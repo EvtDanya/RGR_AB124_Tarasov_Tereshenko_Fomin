@@ -3,9 +3,12 @@
 #include <string>
 using namespace std;
 
-string ceasarEng(string cEng, int keyEng) {
+string ceasarEng(string cEng) {
 	string cEngCrypted = cEng;  //crypted text
 	int i = 0; //text position counter
+	int keyEng;
+	cout << "input key for ceasar: ";
+	cin >> keyEng;
 	while (cEngCrypted[i] != '\0') {
 		if (cEng[i] >= 65 && cEng[i] <= 90) {
 			if ((cEng[i] + keyEng) > 90) { cEngCrypted[i] = (cEng[i] + keyEng) % 90 + 64; }
@@ -19,17 +22,17 @@ string ceasarEng(string cEng, int keyEng) {
 	}
 	return cEngCrypted;
 }
-//string ceasarRu(string cEng) {}
+//string ceasarRu(string cRu) {}
 int main() {
 	bool lang = true; //opredelyaets'a v fynktsii vibora yazika
 	string text; //original text
 	int key; //key for ceasar 
-	cin >> key;
+	cout << "enter text: ";
 	cin >> text;
 	switch (lang) //language definitions
 	{
 	case true: {
-		cout << ceasarEng(text, key); //needs to be converted to work with a file
+		cout << ceasarEng(text); //needs to be converted to work with a file
 	}
 	case false: {
 	}
