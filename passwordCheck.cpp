@@ -2,22 +2,22 @@
 #include <string>
 using namespace std;
 
-bool passwordCheck(string passCh, string password) { //проверка пароля перед шифровкой или дешифровкой файла
+bool passwordCheck(string passCh, string password) { //proverka parol'ya gthtl shifrovkoy/deshifrovkoy
 	if (passCh == password) { return true; }
 	return false;
 }
 
 int main() {
-	string trpassword = "a7", passIncome;
+	string trpassword = "a7", passIncome;//zadayom parol'
 	int flag = -1;
 	while (flag == -1) {
 		cin >> passIncome;
 		if (passwordCheck(passIncome, trpassword) == true) {
-			cout << "true";  //тут производится шифровка/дешифровка файла
-			flag == 1; //переменная признак после которой после первого удачного ввода пароля выйдет из цикла
+			cout << "true";  //tyt proizvodit'cya shifrovka/deshifrovka
+			flag == 1; //peremennaya priznak
 		}
 		else {
-			cout << "пароль неверный, попробуйте снова"<<endl;
+			cout << "password is wrong, try again"<<endl;
 		}
 	}
 }
