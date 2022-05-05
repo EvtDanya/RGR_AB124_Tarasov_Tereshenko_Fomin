@@ -160,23 +160,61 @@ string GetPath() { //path to file entry function
     }
     return path;
 }
-void EntryPathMenu() { //menu for path entering
+void EntryPathMenu(int option) { //menu for path entering
     system("cls"); //clear screen
     Header(5);
-    cout << "The file must have the .txt extension\nSpecify the path to the file with text you need to work with\n";
+    cout << "The file must have the .txt extension\n";
+    if (option == 1) {
+        cout << "Enter the file name (including .txt)\n";
+    }
+    else {
+        cout << "Specify the path to the file with text you need to work with\n";
+    }
     Separate();
 }
-string Path() { //function for getting path to file
-    EntryPathMenu();
-    string path = GetPath(); //we get the path through the function
+string Path(string& path, bool& go_out) { //function for getting path to file
+    system("cls"); //clear screen
+    Header(5);
+    cout << "Choose one of the options \n";
+    cout << "Press \"1\": the file is located in the same folder with the project\n";
+    cout << "Press \"2\": enter the path manually\n";
+    Separate();
+    char choise_option = _getch();
+    switch (choise_option) {
+    case '1': {
+        EntryPathMenu(1);//calling the menu function
+        path = GetPath();//we get the path through the function
+        break;
+    }
+    case '2': {
+        EntryPathMenu(2);//calling the menu function
+        path = GetPath(); //we get the path through the function
+        break;
+    }
+    case 27: {//if pressed esc
+        go_out = true;
+        break;
+    }
+    default: {//if the wrong key is pressed
+        cout << "Incorrect input!\nPress any key to return to the main menu";
+        go_out = true;
+        break;
+    }
+    };
+    if (path.empty() && (!go_out)) {//if the path is not entered 
+        cout << "Error! The path must be entered!\nPress any key to return to the main menu";
+        go_out = true;
+    }
     return path;
 }
-void OpenFile(string path) {
-
+void OpenFile(string& path) {
+   
 }
 int main() {
-    string psw1, psw2, path; //password and confirmation of password
+    bool go_out;//for errors and break cycles;
+    string psw, psw_confirm, path; //password and confirmation of password, path to file
     while (1) { //for returning to the main menu
+        go_out = false;
         MainMenu(1);
         char choise_from_main_menu, choise_cypher;
         choise_from_main_menu = _getch();//waiting for a key to be pressed
@@ -193,21 +231,25 @@ int main() {
             //encrypt and write with password into new txt file
             case '1': {
                 system("cls");//clear the screen
-                psw1 = Psw(psw1, psw2);
-                if (psw1.empty() || psw2.empty()) //if one of the passwords is not entered
+                psw = Psw(psw, psw_confirm);
+                if (psw.empty() || psw_confirm.empty()) //if one of the passwords is not entered
                 {
                     cout << "Error! The password must be entered!\nPress any key to return to the main menu";
                     _getch();//waiting for a key to be pressed
                     break;
                 }
-                if (CheckPsw(psw1, psw2) == false) { //different passwords entered
+                else if (CheckPsw(psw, psw_confirm) == false) { //different passwords entered
                     cout << "Error! Passwords are different!\nPress any key to return to the main menu";
                     _getch();//waiting for a key to be pressed
                     break;
                 }
                 else {
-                    path = Path();
-
+                    path = Path(path, go_out);
+                    if (go_out == true) {
+                        _getch();//waiting for a key to be pressed
+                        break;
+                    }
+                    //else {}
                 }
                 break;
             }
