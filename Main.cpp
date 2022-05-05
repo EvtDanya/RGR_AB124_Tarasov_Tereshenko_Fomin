@@ -4,6 +4,7 @@
 #include <windows.h>
 #include <fstream>
 #include <stdlib.h>
+#include <string>
 using namespace std;
 void Separate() {
     cout << "+------------------------------------------------------------+\n";
@@ -21,9 +22,11 @@ void OutTextForHeader(int header) { //Stroka menu s viborom teksta
     }
     case (4): {//menu for password
         cout << '|' << setw(21) << ' ' << "Password entry menu" << setw(22) << "|\n";
+        break;
     }
     case (5): {//menu for path entering
         cout << '|' << setw(17) << ' ' << "Entering the file path menu" << setw(18) << "|\n";
+        break;
     }
     default:
         break;
@@ -111,11 +114,14 @@ string GetPsw() { //password entry function
     return passw;
 }
 string Psw(string psw1, string& psw2) { //Menu with password entering
-    EntryPswMenu1(1);
-    psw1 = GetPsw();
-    EntryPswMenu2();
-    psw2 = GetPsw();
-    Separate();
+    EntryPswMenu1(4);
+    psw1 = GetPsw(); //we get the password through the function
+    if (!psw1.empty()) //if the string with password is not empty
+    {
+        EntryPswMenu2();
+        psw2 = GetPsw(); //we get the password through the function
+        Separate();
+    }
     return psw1;
 }
 bool CheckPsw(string psw1, string psw2) { //the function checks whether the passwords entered are the same
@@ -162,7 +168,7 @@ void EntryPathMenu() { //menu for path entering
 }
 string Path() { //function for getting path to file
     EntryPathMenu();
-    string path = GetPath();
+    string path = GetPath(); //we get the path through the function
     return path;
 }
 void OpenFile(string path) {
@@ -188,8 +194,14 @@ int main() {
             case '1': {
                 system("cls");//clear the screen
                 psw1 = Psw(psw1, psw2);
+                if (psw1.empty() || psw2.empty()) //if one of the passwords is not entered
+                {
+                    cout << "Error! The password must be entered!\nPress any key to return to the main menu";
+                    _getch();//waiting for a key to be pressed
+                    break;
+                }
                 if (CheckPsw(psw1, psw2) == false) { //different passwords entered
-                    cout << "Passwords are different!\nPress any key to return to the main menu";
+                    cout << "Error! Passwords are different!\nPress any key to return to the main menu";
                     _getch();//waiting for a key to be pressed
                     break;
                 }
