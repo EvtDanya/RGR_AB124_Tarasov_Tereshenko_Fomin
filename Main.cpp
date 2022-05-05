@@ -3,6 +3,7 @@
 #include <conio.h>
 #include <windows.h>
 #include <fstream>
+#include <stdlib.h>
 using namespace std;
 void Separate() {
     cout << "+------------------------------------------------------------+\n";
@@ -18,14 +19,10 @@ void OutTextForHeader(int header) { //Stroka menu s viborom teksta
         cout << '|' << setw(20) << ' ' << "Cipher selection menu" << setw(21) << "|\n";
         break;
     }
-    case (3): { //language selection menu
-        cout << '|' << setw(19) << ' ' << "Language selection menu" << setw(20) << "|\n";
-        break;
-    }
-    case (4): {
+    case (4): {//menu for password
         cout << '|' << setw(21) << ' ' << "Password entry menu" << setw(22) << "|\n";
     }
-    case (5): {
+    case (5): {//menu for path entering
         cout << '|' << setw(17) << ' ' << "Entering the file path menu" << setw(18) << "|\n";
     }
     default:
@@ -51,16 +48,12 @@ void Picture() { //output picture
     Sleep(2000);//wait for 2 seconds
     system("cls");//clear the screen
 }
-void MainMenu(int header, bool lang) {
+void MainMenu(int header) {
     system("cls");//clear the screen
     Header(header);
-    cout << "Selected language: ";
-    if (lang == true) { cout << "\x1b[31mEnglish\x1b[0m\n"; }
-    else { cout << "\x1b[31mRussian\x1b[0m\n"; }
-    cout << "Press \"1\": \x1b[31mencryption\x1b[0m\n";
-    cout << "Press \"2\": \x1b[31mdecryption\x1b[0m\n";
-    cout << "Press \"3\": \x1b[31mchange language\x1b[0m\n";
-    cout << "Press \"Esc\": \x1b[31mexit the programm\x1b[0m\n";
+    cout << "Press \"1\": \x1b[31mencryption\x1b[0m\n"; //output red text with construction \x1b[31m...\x1b[0m
+    cout << "Press \"2\": \x1b[31mdecryption\x1b[0m\n"; //output red text
+    cout << "Press \"Esc\": \x1b[31mexit the programm\x1b[0m\n"; //output red text
     Separate();
 }
 void ChooseCypherMenu(int header) {
@@ -72,61 +65,113 @@ void ChooseCypherMenu(int header) {
     cout << "Press the cypher number or press \"Esc\" to return\n";
     Separate();
 }
-void ChooseLangMenu(int header, bool lang) {
-    system("cls"); //  clear screen
-    Header(header);
-    cout << "Selected language is ";
-    if (lang == true) { cout << "\x1b[31mEnglish\x1b[0m\n"; }
-    else { cout << "\x1b[31mRussian\x1b[0m\n"; }
-    cout << "Press \"1\" for English, \"2\" for Russian or \"Esc\" to return\n";
-    Separate();
-}
-void EntryPswMenu1(int header) {
+void EntryPswMenu1(int header) { //Menu for first enter of password
     system("cls"); //clear screen
     Header(header);
-    cout << "Your password must be less than 15 characters\n";
-    cout << "Please enter your password >> \n";
+    cout << "Please enter your password and press \"Enter\"\n";
+    cout << "Press \"Backspace\" to delete symbols or press \"Esc\" to return\n";
     Separate();
 }
-void EntryPswMenu2() {
+void EntryPswMenu2() {//Menu for second enter of password to confirm first
     Separate();
     cout << "Confirm your password >> \n";
     Separate();
 }
-string GetPsw() {
+string GetPsw() { //password entry function
     string passw;
-    cin >> passw;
+    int ch = 0; //symbol variable for entering
+    while (true)
+    {
+        ch = _getch(); //put the code of the pressed key in the ch
+        if (ch == 13) // Enter - interrupt
+        {
+            cout << '\n';
+            break;
+        }
+        else if (ch == 27) //Esc return to main menu
+        {
+            break;
+        }
+        else if (ch == 8) //Backspace - delete symbols
+        {
+            cout << (char)8 << ' ' << (char)8;
+            //offset one symbol to the left, output whitespace instead of a symbol
+            //offset one symbol to the left once again 
+            //this means that we have deleted the entered symbol
+            if (!passw.empty()) //if our string is not empty
+                passw.pop_back(); //delete the last symbol from the string
+
+        }
+        else //if pressed symbol for password
+        {
+            cout << '*';  //output * instead of a symbol 
+            passw += (char)ch;  //Turning a code from an integer into a symbol 
+        }
+    }
     return passw;
 }
-bool CheckPsw(string psw1, string psw2) {
+string Psw(string psw1, string& psw2) { //Menu with password entering
+    EntryPswMenu1(1);
+    psw1 = GetPsw();
+    EntryPswMenu2();
+    psw2 = GetPsw();
+    Separate();
+    return psw1;
+}
+bool CheckPsw(string psw1, string psw2) { //the function checks whether the passwords entered are the same
     if (psw1 == psw2) { return true; }
     else { return false; }
 }
-bool PswMenu() {
-    EntryPswMenu1(1);
-    string psw1 = GetPsw();
-    EntryPswMenu2();
-    string psw2 = GetPsw();
-    Separate();
-    return CheckPsw(psw1, psw2);
-}
-void ChooseFileMenu() {
-    system("cls"); //clear screen
-    Header(5);
-    cout << "The file must have the .txt extension\nSpecify the path to the file with text you need to work with >>\n";
-    Separate();
-}
-string PathToFile() {
+string GetPath() { //path to file entry function
     string path;
-    cin >> path;
+    int ch = 0; //symbol variable for entering
+    while (true)
+    {
+        ch = _getch(); //put the code of the pressed key in the ch
+        if (ch == 13) // Enter - interrupt
+        {
+            cout << '\n';
+            break;
+        }
+        else if (ch == 27) //Esc return to main menu
+        {
+            break;
+        }
+        else if (ch == 8) //Backspace - delete symbols
+        {
+            cout << (char)8 << ' ' << (char)8;
+            //offset one symbol to the left, output whitespace instead of a symbol
+            //offset one symbol to the left once again 
+            //this means that we have deleted the entered symbol
+            if (!path.empty()) //if our string is not empty
+                path.pop_back(); //delete the last symbol from the string
+        }
+        else
+        {
+            cout << (char)ch;       //output of the symbol that was entered
+            path += (char)ch;       //Turning a code from an integer into a symbol
+        }
+    }
     return path;
 }
+void EntryPathMenu() { //menu for path entering
+    system("cls"); //clear screen
+    Header(5);
+    cout << "The file must have the .txt extension\nSpecify the path to the file with text you need to work with\n";
+    Separate();
+}
+string Path() { //function for getting path to file
+    EntryPathMenu();
+    string path = GetPath();
+    return path;
+}
+void OpenFile(string path) {
+
+}
 int main() {
-    bool lang = true;
-    string pwd1, pwd2; //password and confirmation of password
+    string psw1, psw2, path; //password and confirmation of password
     while (1) { //for returning to the main menu
-    START:
-        MainMenu(1, lang);
+        MainMenu(1);
         char choise_from_main_menu, choise_cypher;
         choise_from_main_menu = _getch();//waiting for a key to be pressed
         switch (choise_from_main_menu) //depending on the key pressed
@@ -135,21 +180,22 @@ int main() {
             ChooseCypherMenu(2);
             choise_cypher = _getch();//waiting for a key to be pressed
             switch (choise_cypher) {//depending on the key pressed
-            //get language(if need) +
-            //get password
-            // check password
-            //get text
-            //encrypt and write all into txt? file
+            //get password+
+            //check password+
+            //get path to txt file+
+            //Если пароль не ввели или путь вернуться в главное меню
+            //encrypt and write with password into new txt file
             case '1': {
                 system("cls");//clear the screen
-                if (PswMenu() == false) { //different passwords entered
+                psw1 = Psw(psw1, psw2);
+                if (CheckPsw(psw1, psw2) == false) { //different passwords entered
                     cout << "Passwords are different!\nPress any key to return to the main menu";
                     _getch();//waiting for a key to be pressed
                     break;
                 }
                 else {
-                    ChooseFileMenu();
-                    PathToFile();
+                    path = Path();
+
                 }
                 break;
             }
@@ -263,32 +309,6 @@ int main() {
             //check password
             //decrypt text and output it
             break;
-        }
-        case '3': {
-            ChooseLangMenu(3, lang);
-            char choise_lang = _getch();
-            switch (choise_lang)
-            {
-            case '1': {
-                lang = true;
-                goto START;
-                break;
-            }
-            case '2': {
-                lang = false;
-                goto START;
-                break;
-            }
-            case 27: {//if pressed esc
-                goto START;
-                break;
-            }
-            default: {//if the wrong key is pressed
-                cout << "Incorrect input!\nPress any key to return to the main menu";
-                _getch();//waiting for a key to be pressed
-                break;
-            }
-            };
         }
         case 27: {//if pressed esc
             Picture();
