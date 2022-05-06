@@ -5,6 +5,7 @@
 #include <fstream>
 #include <stdlib.h>
 #include <string>
+#include <vector>
 using namespace std;
 void Separate() {
     cout << "+------------------------------------------------------------+\n";
@@ -80,7 +81,7 @@ void EntryPswMenu2() {//Menu for second enter of password to confirm first
     cout << "Confirm your password >> \n";
     Separate();
 }
-string GetPsw() { //password entry function
+string GetPsw(bool& esc) { //password entry function
     string passw;
     int ch = 0; //symbol variable for entering
     while (true)
@@ -93,6 +94,7 @@ string GetPsw() { //password entry function
         }
         else if (ch == 27) //Esc return to main menu
         {
+            esc = true;
             break;
         }
         else if (ch == 8) //Backspace - delete symbols
@@ -113,22 +115,36 @@ string GetPsw() { //password entry function
     }
     return passw;
 }
-string Psw(string psw1, string& psw2) { //Menu with password entering
+string Psw(string psw1, string& psw2, bool& go_out, bool& esc) { //Menu with password entering
     EntryPswMenu1(4);
-    psw1 = GetPsw(); //we get the password through the function
-    if (!psw1.empty()) //if the string with password is not empty
+    psw1 = GetPsw(esc); //we get the password through the function
+    if (!psw1.empty() && (!esc)) //if the string with password is not empty
     {
         EntryPswMenu2();
-        psw2 = GetPsw(); //we get the password through the function
+        psw2 = GetPsw(esc); //we get the password through the function
         Separate();
     }
+    if (esc) { go_out = true; }
     return psw1;
 }
 bool CheckPsw(string psw1, string psw2) { //the function checks whether the passwords entered are the same
     if (psw1 == psw2) { return true; }
     else { return false; }
 }
-string GetPath() { //path to file entry function
+void ForArrows(string arrow, vector <string>& history_path, string& current) {
+    int position = find(history_path.begin(), history_path.end(), current);
+    if (arrow == "up") {
+        if (current != history_path.back()) {
+            current = history_path.at(position);
+        }
+    }
+    else if (arrow == "down") {
+        if (current != history_path.front()) {
+
+        }
+    }
+}
+string GetPath(bool& esc, vector <string>& history_path, string& current) { //path to file entry function
     string path;
     int ch = 0; //symbol variable for entering
     while (true)
@@ -141,7 +157,20 @@ string GetPath() { //path to file entry function
         }
         else if (ch == 27) //Esc return to main menu
         {
+            esc = true;
             break;
+        }
+        if (ch == 224) //Проверка нажатия функциональной клавиши
+        {
+            ch = _getch();
+            if (!history_path.empty()) {
+                if (ch == 72) {
+                    ForArrows("up", history_path, current);
+                }
+                else if (ch == 80) {
+                    ForArrows("down", history_path, current);
+                }
+            }
         }
         else if (ch == 8) //Backspace - delete symbols
         {
@@ -165,14 +194,15 @@ void EntryPathMenu(int option) { //menu for path entering
     Header(5);
     cout << "The file must have the .txt extension\n";
     if (option == 1) {
-        cout << "Enter the file name (including .txt)\n";
+        cout << "Enter the file name (including .txt) and press \"Enter\"\n";
     }
     else {
-        cout << "Specify the path to the file with text you need to work with\n";
+        cout << "Specify the path to the file and press \"Enter\"\n";
     }
+    cout << "Press \"Backspace\" to delete symbols or press \"Esc\" to return\n";
     Separate();
 }
-string Path(string& path, bool& go_out) { //function for getting path to file
+string Path(string path, vector <string>& history_path, bool& go_out, bool& esc) { //function for getting path to file
     system("cls"); //clear screen
     Header(5);
     cout << "Choose one of the options \n";
@@ -183,12 +213,12 @@ string Path(string& path, bool& go_out) { //function for getting path to file
     switch (choise_option) {
     case '1': {
         EntryPathMenu(1);//calling the menu function
-        path = GetPath();//we get the path through the function
+        path = GetPath(esc);//we get the path through the function
         break;
     }
     case '2': {
         EntryPathMenu(2);//calling the menu function
-        path = GetPath(); //we get the path through the function
+        path = GetPath(esc); //we get the path through the function
         break;
     }
     case 27: {//if pressed esc
@@ -201,20 +231,37 @@ string Path(string& path, bool& go_out) { //function for getting path to file
         break;
     }
     };
-    if (path.empty() && (!go_out)) {//if the path is not entered 
+    if (path.empty() && (!go_out) && (!esc)) {//if the path is not entered 
         cout << "Error! The path must be entered!\nPress any key to return to the main menu";
         go_out = true;
+        _getch();//waiting for a key to be pressed
     }
+    else if (esc) { go_out = true; }
+    history_path.push_back(path);
     return path;
 }
 void OpenFile(string& path) {
-   
+    ifstream ifs(path);
+    if (ifs.is_open()) {
+        // print file:
+        char c = ifs.get();
+        while (ifs.good()) {
+            cout << c;
+            c = ifs.get();
+        }
+    }
+    else {
+        // show message:
+        cout << "Error opening file";
+    }
 }
 int main() {
-    bool go_out;//for errors and break cycles;
-    string psw, psw_confirm, path; //password and confirmation of password, path to file
+    vector <string> history_path;
+    bool go_out, esc;//go_out - for errors and break cycles, esc - if pressed escape
+    string psw, psw_confirm, path; //password and confirmation of password, path to file, history of entering paths
     while (1) { //for returning to the main menu
         go_out = false;
+        esc = false;
         MainMenu(1);
         char choise_from_main_menu, choise_cypher;
         choise_from_main_menu = _getch();//waiting for a key to be pressed
@@ -227,15 +274,18 @@ int main() {
             //get password+
             //check password+
             //get path to txt file+
-            //Если пароль не ввели или путь вернуться в главное меню
+            //Если пароль не ввели или путь вернуться в главное меню+
             //encrypt and write with password into new txt file
             case '1': {
                 system("cls");//clear the screen
-                psw = Psw(psw, psw_confirm);
-                if (psw.empty() || psw_confirm.empty()) //if one of the passwords is not entered
+                psw = Psw(psw, psw_confirm, go_out, esc);
+                if ((psw.empty() || psw_confirm.empty()) && (!go_out)) //if one of the passwords is not entered
                 {
                     cout << "Error! The password must be entered!\nPress any key to return to the main menu";
                     _getch();//waiting for a key to be pressed
+                    break;
+                }
+                else if (go_out) {
                     break;
                 }
                 else if (CheckPsw(psw, psw_confirm) == false) { //different passwords entered
@@ -244,12 +294,14 @@ int main() {
                     break;
                 }
                 else {
-                    path = Path(path, go_out);
-                    if (go_out == true) {
-                        _getch();//waiting for a key to be pressed
+                    path = Path(path, history_path, go_out, esc);
+                    if (go_out) {
                         break;
                     }
-                    //else {}
+                    else {
+                        OpenFile(path);
+                        _getch();
+                    }
                 }
                 break;
             }
