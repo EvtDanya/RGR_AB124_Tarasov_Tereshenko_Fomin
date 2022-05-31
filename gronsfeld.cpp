@@ -3,44 +3,65 @@
 
 #include <iostream>
 #include <string>
-#include <windows.h>
-#include <clocale>
 using namespace std;
 
-string Encrypt4(string cEng) {
-	string cEngCrypted = cEng;  //crypted text
-	int i = 0, ii = 0; //text position counter
-	string keyEng;
-	cout << "input key for Gronsfeldonly numbers: ";
-	cin >> keyEng;
-	while (cEngCrypted[i] != '\0') { //value substitution
+string Encrypt4(string cEng, string keyEng) {
+	string Crypted = cEng;  //crypted Crypted
+	int i = 0, ii = 0; //Crypted position counter	
+	while (Crypted[i] != '\0') { //value substitution		
 		if (cEng[i] >= 65 && cEng[i] <= 90) {
 			if ((cEng[i] + (int)keyEng[ii] - 48) > 90) {
-				cEngCrypted[i] = (cEng[i] + (int)keyEng[ii]) % 90 + 64 - 48;
+				Crypted[i] = 64 + abs((cEng[i] + (int)keyEng[ii] - 48 - 90)) % 26;
 			}
 			else {
-				cEngCrypted[i] = cEng[i] + (int)keyEng[ii] - 48;
+				Crypted[i] = cEng[i] + (int)keyEng[ii] - 48;
 			}
 		}
-		else {
+		else if (cEng[i] >= 97 && cEng[i] <= 122) {
 			if ((cEng[i] + (int)keyEng[ii] - 48) > 122) {
-				cEngCrypted[i] = (cEng[i] + (int)keyEng[ii]) % 122 + 96 - 48;
+				Crypted[i] = 96 + abs((cEng[i] + (int)keyEng[ii] - 48 - 122)) % 26;
 			}
 			else {
-				cEngCrypted[i] = cEng[i] + (int)keyEng[ii] - 48;
+				Crypted[i] = cEng[i] + (int)keyEng[ii] - 48;
 			}
 		}
 		ii++;
 		i++;
 		if (ii == keyEng.length()) { ii = 0; }
 	}
-	return cEngCrypted;
+	return Crypted;
+}
+string Decrypt4(string cEng, string keyEng) {
+	string DeCrypted = cEng;  //DeCrypted Crypted
+	int i = 0, ii = 0; //Crypted position counter	
+	while (DeCrypted[i] != '\0') { //value substitution
+		if (cEng[i] >= 65 && cEng[i] <= 90) {
+			if ((cEng[i] - (int)keyEng[ii] + 48) < 65) {
+				DeCrypted[i] = 91 - abs((cEng[i] - (int)keyEng[ii] + 48 - 65)) % 26;
+			}
+			else {
+				DeCrypted[i] = cEng[i] - (int)keyEng[ii] + 48;
+			}
+		}
+		else if (cEng[i] >= 97 && cEng[i] <= 122) {
+			if ((cEng[i] - (int)keyEng[ii] + 48) < 97) {
+				DeCrypted[i] = 123 - abs((cEng[i] - (int)keyEng[ii] + 48 - 97)) % 26;
+			}
+			else {
+				DeCrypted[i] = cEng[i] - (int)keyEng[ii] + 48;
+			}
+		}
+		ii++;
+		i++;
+		if (ii == keyEng.length()) { ii = 0; }
+	}
+	return DeCrypted;
 }
 /*string GronsfeldRu(string cRu) {
 
 	//string alphabetRu = "ÀÁÂÃÄÅ¨ÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäå¸æçèéêëìíîïðñòóôõö÷øùúûüýþÿ"; //RuAlphabet for cryption
 
-	int i = 0, ii = 0;//text position counter
+	int i = 0, ii = 0;//Crypted position counter
 	string keyRu;
 	cout << "input key for Gronsfeld(only numbers): ";
 	cin >> keyRu; //key for GronsfeldRu
@@ -87,11 +108,16 @@ string Encrypt4(string cEng) {
 	}
 	return cRu;
 }*/
-int main() {	
-	string text; //original text
-	cout << "enter text: ";
-	cin >> text;	
-	cout << Encrypt4(text); //needs to be converted to work with a file
-	
+int main() {
+	string Crypted, cryptedCrypted, decryptedCrypted; //original Crypted
+	cout << "enter Crypted: ";
+	cin >> Crypted;
+	string key;
+	cout << "input key for Gronsfeldonly numbers: ";
+	cin >> key;
+	cryptedCrypted = Encrypt4(Crypted, key);
+	cout << cryptedCrypted << endl;
+	decryptedCrypted = Decrypt4(cryptedCrypted, key);
+	cout << decryptedCrypted;
 
 }
