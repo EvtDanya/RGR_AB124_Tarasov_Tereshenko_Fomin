@@ -7,7 +7,7 @@
 #include <clocale>
 using namespace std;
 
-string GronsfeldEng(string cEng) {
+string Encrypt4(string cEng) {
 	string cEngCrypted = cEng;  //crypted text
 	int i = 0, ii = 0; //text position counter
 	string keyEng;
@@ -36,7 +36,7 @@ string GronsfeldEng(string cEng) {
 	}
 	return cEngCrypted;
 }
-string GronsfeldRu(string cRu) {
+/*string GronsfeldRu(string cRu) {
 
 	//string alphabetRu = "ÀÁÂÃÄÅ¨ÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäå¸æçèéêëìíîïðñòóôõö÷øùúûüýþÿ"; //RuAlphabet for cryption
 
@@ -82,26 +82,16 @@ string GronsfeldRu(string cRu) {
 		else {
 			if ((posInRu + keyRu) > 65) { cRu[i] = alphabetRu[(posInRu + keyRu) % 65 - 1]; }
 			else { cRu[i] = alphabetRu[posInRu + keyRu]; }
-		}*/
+		}
 
 	}
 	return cRu;
-}
-int main() {
-	setlocale(LC_ALL, "Rus");
-	SetConsoleCP(1251);
-	SetConsoleOutputCP(1251);
-	bool lang = false; //opredelyaets'a v fynktsii vibora yazika
+}*/
+int main() {	
 	string text; //original text
-
 	cout << "enter text: ";
-	cin >> text;
-	if (lang == true) //language definitions
-	{
-		cout << GronsfeldEng(text); //needs to be converted to work with a file
-	}
-	else {
-		cout << GronsfeldRu(text);
-	}
+	cin >> text;	
+	cout << Encrypt4(text); //needs to be converted to work with a file
+	
 
 }
