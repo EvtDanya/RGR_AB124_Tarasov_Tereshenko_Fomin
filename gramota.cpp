@@ -4,7 +4,7 @@
 #include <string>
 using namespace std;
 
-string Encrypt4(string cEng) {
+string Encrypt5(string cEng) {
 	string Crypted = cEng;  //crypted Crypted
 	int i = 0, ii = 0; //Crypted position counter	
 	string Alphabet = "BCDFGHJKLMNPQRSTVWXZbcdfghjklmnpqrstvwxz";
@@ -21,7 +21,7 @@ string Encrypt4(string cEng) {
 	}
 	return Crypted;
 }
-string Decrypt4(string cEng) {
+string Decrypt5(string cEng) {
 	string DeCrypted = cEng;  //DeCrypted Crypted
 	int i = 0, ii = 0; //Crypted position counter	
 	string Alphabet = "BCDFGHJKLMNPQRSTVWXZbcdfghjklmnpqrstvwxz";
