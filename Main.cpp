@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <string>
 #include <vector>
+#define canUse "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 using namespace std;
 void Separate() {
     cout << "+------------------------------------------------------------+\n";
@@ -30,7 +31,7 @@ void OutputTextForHeader(int header) { //Stroka menu s viborom teksta
         break;
     }
     case (5): {//key entering
-        cout << '|' << setw(23) << ' ' << "Key entry menu" << setw(25) << "|\n";
+        cout << '|' << setw(23) << ' ' << "key entry menu" << setw(25) << "|\n";
         break;
     }
     default:
@@ -66,20 +67,15 @@ void OutputError(int numboferror) {
         break;
     }
     case (6): {//if pressend space
-        cout << " You cannot use such symbol! Press any key to continue";
+        cout << " You cannot use spaces! Press any key to continue";
         _getch();
-        for (int i = 0; i < 54; i++) {
+        for (int i = 0; i < 49; i++) {
             cout << (char)8 << ' ' << (char)8;
         }
         break;
     }
-    case (7): {//if it didn't work out, write to a file
+    case (7): {
         cout << "Error in working with the file!\nPress any key to return to the main menu";
-        _getch();//waiting for a key to be pressed
-        break;
-    }
-    case (8): {//the key was not entered 
-        cout << "Error! The key must be entered!\nPress any key to return to the main menu";
         _getch();//waiting for a key to be pressed
         break;
     }
@@ -93,16 +89,18 @@ void Header(int header) {//shapka
     Separate();
 }
 void Picture() { //output picture 
-    char a[255];
-    ifstream F;
-    F.open("doh.txt"); //open file with picture(must be in the same folder with the .cpp)
+    string str;
+    ifstream input;
+    input.open("doh.txt");
     system("cls");//clear the screen
     cout << setw(10) << ' ' << "Thanks for using our program!\n";
-    while (!F.eof())
-    {
-        F.getline(a, sizeof(a));
-        cout << a << "\n";
+    while (getline(input, str)) {
+        cout << str << endl;
     }
+    if (!input.eof()) { //if the file could not be opened
+        exit(0);
+    }
+    input.close();
     Sleep(2000);//wait for 2 seconds
     system("cls");//clear the screen
 }
@@ -114,35 +112,15 @@ void MainMenu(int header) { //For printing the main menu
     cout << "Press \"Esc\": \x1b[31mexit the programm\x1b[0m\n"; //output red text
     Separate();
 }
-void KeyMenu(int header, int option) {//For printing the main menu
+void KeyMenu(int header) {//For printing the main menu
     system("cls");//clear the screen
     Header(header);
     cout << "Please enter key for cypher and press \"Enter\"\n"; //output red text with construction \x1b[31m...\x1b[0m
-    if (option == 1) { cout << "You \x1b[31mcan only use\x1b[0m numbers and letters of the English alphabet\n"; }
-    else { cout << "You \x1b[31mcan only use\x1b[0m numbers\n"; }
+    cout << "The key \x1b[31mmust not contain\x1b[0m spaces!\n";
     cout << "Press \"Backspace\" to delete symbols or press \"Esc\" to return\n";
     Separate();
 }
-bool CanUse(int option, char ch) {
-    if (option == 1) {
-        string canUse = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-        if (canUse.find(char(ch)) != string::npos) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-    else {
-        if (isdigit(ch)) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-}
-string GetKey(bool& esc, int option) {//key entry function
+string GetKey(bool& esc) {
     string key;
     int ch = 0; //symbol variable for entering
     while (true)
@@ -168,7 +146,7 @@ string GetKey(bool& esc, int option) {//key entry function
                 key.pop_back(); //delete the last symbol from the string
 
         }
-        else if (!CanUse(option, char(ch))) {//
+        else if (ch == 32) {//space - output error
             OutputError(6);
         }
         else //if pressed symbol for password
@@ -179,9 +157,9 @@ string GetKey(bool& esc, int option) {//key entry function
     }
     return key;
 }
-string Key(int option, string key, bool& go_out, bool& esc) {//Menu with key entering
-    KeyMenu(5, option);
-    key = GetKey(esc, option);
+string Key(string key, bool& go_out, bool& esc) {
+    KeyMenu(5);
+    key = GetKey(esc);
     if (esc) { go_out = true; }
     return key;
 }
@@ -198,7 +176,7 @@ void EntryPswMenu1(int header) { //Menu for first enter of password
     system("cls"); //clear screen
     Header(header);
     cout << "Please enter your password and press \"Enter\"\n";
-    cout << "You \x1b[31mcan only use\x1b[0m numbers and letters of the English alphabet\n";
+    cout << "The password \x1b[31mmust not contain\x1b[0m spaces!\n";
     cout << "Press \"Backspace\" to delete symbols or press \"Esc\" to return\n";
     Separate();
 }
@@ -232,8 +210,8 @@ string GetPsw(bool& esc) { //password entry function
             if (!passw.empty()) //if our string is not empty
                 passw.pop_back(); //delete the last symbol from the string
 
-        } //1 - because we can only use nymbers and english letters
-        else if (!CanUse(1, char(ch))) {//if we cant use this symbol(not number or not english letter)
+        }
+        else if (ch == 32) {//space - output error
             OutputError(6);
         }
         else //if pressed symbol for password
@@ -405,7 +383,7 @@ string Path(string path/*, vector <string>& history_path, string& current*/, boo
         OutputError(5);
     }
 }*/
-void OpenNReadFile(vector <string>& contwithstr, const string& fileName, bool& go_out) {//open file and read strings we need to encrypt
+vector<string> OpenNReadFile(vector <string> contwithstr, const string& fileName, bool& go_out) {//open file and read strings we need to encrypt
     string str;
     ifstream input;
     input.open(fileName);
@@ -418,6 +396,37 @@ void OpenNReadFile(vector <string>& contwithstr, const string& fileName, bool& g
         go_out = true;
     }
     input.close();
+    return contwithstr;
+}
+struct PswKeyText {
+    string password;
+    string key;
+    vector<string> text;
+};
+bool OpenNCheck(const string& fileName) {
+    bool is_ok = true;
+
+    return is_ok;
+}
+PswKeyText OpenNReadPswKeyText(PswKeyText pswkeytext, const string& fileName, bool& go_out) {
+    string str;
+    vector<string> contwithstr;
+    ifstream input;
+    input.open(fileName);
+    while (getline(input, str)) {
+        //str = str + "\n";
+        contwithstr.push_back(str);
+    }
+    if (!input.eof()) { //if the file could not be opened
+        OutputError(5);
+        go_out = true;
+    }
+    input.close();
+    //разделить строку по пробелам и записать в соотв ячейки
+    pswkeytext.password = contwithstr[0];
+    //записать остальное в вектор
+
+    return pswkeytext;
 }
 string Encrypt1(string cEng, int key) {//1 cypher
     string cEngCrypted = cEng;  //crypted text
@@ -440,7 +449,7 @@ vector <string> Encryption(vector <string>& contwithstr, string key, int numbofc
         switch (numbofcyph)//depending on the chosen cipher
         {
         case (1): {
-            int intkey = atoi(key.c_str());//from string to int
+            int intkey = atoi(key.c_str());
             contwithstr.at(i) = Encrypt1(contwithstr.at(i), intkey);
             break;
         }
@@ -518,16 +527,11 @@ void Ofstream(vector <string> contwithstr, const char* fileName, string password
 void AutoOpen(const char* pathtotxt) {//open with notepad.exe
     system(pathtotxt);
 }
-void EncryptCase(int keyoption, int numbofcyph, string& psw, string& psw_confirm, string& path, string& key, bool& go_out, bool& esc, bool& needkey, vector <string>& contwithstr) {
-    bool key_received = true;
+void EncryptCase(string& psw, string& psw_confirm, string& path, string& key, bool& go_out, bool& esc, bool& needkey, vector <string>& contwithstr, int numbofcyph) {
     if (needkey) {
-        key = Key(keyoption, key, go_out, esc);
-        if (key.empty()) {
-            key_received = false;
-            OutputError(8);
-        }
+        key = Key(key, go_out, esc);
     }
-    if (!go_out && key_received) {
+    if (!go_out) {
         psw = Psw(psw, psw_confirm, go_out, esc);
         if ((psw.empty() || psw_confirm.empty()) && (!go_out)) //if one of the passwords is not entered
         {
@@ -555,55 +559,52 @@ void EncryptCase(int keyoption, int numbofcyph, string& psw, string& psw_confirm
     }
 }
 void EncryptCases(string& psw, string& psw_confirm, string& path, string& key, bool& go_out, bool& esc, bool& needkey, vector <string>& contwithstr) {
-    int keyoption = 2, nymbofcyph = 1;
     ChooseCypherMenu(2);
     char choise_cypher = _getch();//waiting for a key to be pressed
     switch (choise_cypher) {//depending on the key pressed
     case '1': {
-        needkey = true;//the cypher need a key
-        keyoption = 2;//we can enter only numbers for this key
-        nymbofcyph = 1;//Number of cypher we want to use
-        EncryptCase(keyoption, nymbofcyph, psw, psw_confirm, path, key, go_out, esc, needkey, contwithstr);
+        needkey = true;//the cipher does not need a key
+        EncryptCase(psw, psw_confirm, path, key, go_out, esc, needkey, contwithstr, 1);
         break;
     }
     case '2': {
-        needkey = false;//the cypher does not need a key
-        EncryptCase(keyoption, nymbofcyph, psw, psw_confirm, path, key, go_out, esc, needkey, contwithstr);
+        needkey = false;//the cipher does not need a key
+        EncryptCase(psw, psw_confirm, path, key, go_out, esc, needkey, contwithstr, 1);
         break;
     }
     case '3': {
-        needkey = false;//the cypher does not need a key
-        EncryptCase(keyoption, nymbofcyph, psw, psw_confirm, path, key, go_out, esc, needkey, contwithstr);
+        needkey = false;//the cipher does not need a key
+        EncryptCase(psw, psw_confirm, path, key, go_out, esc, needkey, contwithstr, 1);
         break;
     }
     case '4': {
-        needkey = false;//the cypher does not need a key
-        EncryptCase(keyoption, nymbofcyph, psw, psw_confirm, path, key, go_out, esc, needkey, contwithstr);
+        needkey = false;//the cipher does not need a key
+        EncryptCase(psw, psw_confirm, path, key, go_out, esc, needkey, contwithstr, 1);
         break;
     }
     case '5': {
-        needkey = false;//the cypher does not need a key
-        EncryptCase(keyoption, nymbofcyph, psw, psw_confirm, path, key, go_out, esc, needkey, contwithstr);
+        needkey = false;//the cipher does not need a key
+        EncryptCase(psw, psw_confirm, path, key, go_out, esc, needkey, contwithstr, 1);
         break;
     }
     case '6': {
-        needkey = false;//the cypher does not need a key
-        EncryptCase(keyoption, nymbofcyph, psw, psw_confirm, path, key, go_out, esc, needkey, contwithstr);
+        needkey = false;//the cipher does not need a key
+        EncryptCase(psw, psw_confirm, path, key, go_out, esc, needkey, contwithstr, 1);
         break;
     }
     case '7': {
-        needkey = false;//the cypher does not need a key
-        EncryptCase(keyoption, nymbofcyph, psw, psw_confirm, path, key, go_out, esc, needkey, contwithstr);
+        needkey = false;//the cipher does not need a key
+        EncryptCase(psw, psw_confirm, path, key, go_out, esc, needkey, contwithstr, 1);
         break;
     }
     case '8': {
-        needkey = false;//the cypher does not need a key
-        EncryptCase(keyoption, nymbofcyph, psw, psw_confirm, path, key, go_out, esc, needkey, contwithstr);
+        needkey = false;//the cipher does not need a key
+        EncryptCase(psw, psw_confirm, path, key, go_out, esc, needkey, contwithstr, 1);
         break;
     }
     case '9': {
-        needkey = false;//the cypher does not need a key
-        EncryptCase(keyoption, nymbofcyph, psw, psw_confirm, path, key, go_out, esc, needkey, contwithstr);
+        needkey = false;//the cipher does not need a key
+        EncryptCase(psw, psw_confirm, path, key, go_out, esc, needkey, contwithstr, 1);
         break;
     }
     case 27: { break; } //if pressed esc
@@ -615,7 +616,9 @@ void EncryptCases(string& psw, string& psw_confirm, string& path, string& key, b
 }
 void DecryptCase(string& psw, string& psw_confirm, string& path, string& key, bool& go_out, bool& esc, bool& needkey, vector <string>& contwithstr, int numbofcyph) {
     //получить путь к файлу
-    //читать 1 строку и проверить пароль
+    // проверить на целостность файл(пароль и ключ правильно записаны)
+    //ввести с клавы пароль, захешировать и сравнить с тем, Что в файле 
+    //
     //с этой же строки взять ключ
     //расшифровать и в новый файл
 }
