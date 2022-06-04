@@ -12,9 +12,9 @@ struct morse {
 vector<string> split(const string& inputstr, char delim)
 {
     vector<string> buffer;
-    stringstream ss(inputstr);
+    stringstream strstream(inputstr);
     string str;
-    while (getline(ss, str, delim)) {
+    while (getline(strstream, str, delim)) {
         buffer.push_back(str);
     }
     return buffer;
