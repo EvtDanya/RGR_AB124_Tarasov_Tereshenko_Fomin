@@ -141,9 +141,10 @@ void MainMenu(int header) { //For printing the main menu
 void ChooseCypherMenu(int header) {//for printing the menu with choosing cyphers
     system("cls"); //clear the screen
     Header(header);
-    cout << "1 - Шифр Гронсфельда" << setw(30) << "4 - Шифр Виженера\n";
-    cout << "2 - Тарабарская грамота" << setw(22) << "5 - Шифр XOR(Вернама)\n";
+    cout << "1 - Шифр Гронсфельда" << setw(30) << "4 - Шифр Виженера*\n";
+    cout << "2 - Тарабарская грамота" << setw(30) << "5 - Шифр XOR(Вернама)\n";
     cout << "3 - Шифр Атбаша" << setw(33) << "6 - Азбука Морзе\n";
+    cout << "* lowercase letters become uppercase letters\n";
     cout << "Press the cypher number or press \"Esc\" to return\n";
     Separate();
 }
