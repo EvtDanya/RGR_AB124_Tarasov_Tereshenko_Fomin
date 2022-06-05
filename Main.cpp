@@ -135,6 +135,7 @@ void MainMenu(int header) { //For printing the main menu
     cout << "All characters except English letters and numbers are ignored!\n";
     cout << "Press \"1\": \x1b[31mencryption\x1b[0m\n"; //output red text with construction \x1b[31m...\x1b[0m
     cout << "Press \"2\": \x1b[31mdecryption\x1b[0m\n"; //output red text
+    cout << "Файл для расшифровки должен содержать в первой строке пароль\nи ключ, разделенные пробелом и ничего больше, \nна остальных строках зашифрованный текст\n";
     cout << "Press \"Esc\": \x1b[31mexit the programm\x1b[0m\n"; //output red text
     Separate();
 }
@@ -479,49 +480,6 @@ string Encrypt4(string m, string k) {
     }
     return vig;
 }
-string EncryptForKey(string cEng) {
-    int key = 5;
-    string cEngCrypted = cEng;  //crypted text
-    int i = 0; //text position counter
-    while (cEngCrypted[i] != '\0') { //value substitution
-        if (cEng[i] >= 65 && cEng[i] <= 90) {
-            if ((cEng[i] + key) > 90) { cEngCrypted[i] = (cEng[i] + key) % 90 + 64; }
-            else { cEngCrypted[i] = cEng[i] + key; }
-        }
-        else {
-            if ((cEng[i] + key) > 122) { cEngCrypted[i] = (cEng[i] + key) % 122 + 96; }
-            else { cEngCrypted[i] = cEng[i] + key; }
-        }
-        i++;
-    }
-    return cEngCrypted;
-}
-string DecryptForKey(string cEng) {
-    int keyEng = 5;
-    string cEngDeCrypted = cEng;  //crypted text
-    int i = 0; //text position counter
-
-    while (cEngDeCrypted[i] != '\0') { //value substitution
-        if (cEng[i] >= 65 && cEng[i] <= 90) {
-            if ((cEng[i] - keyEng) < 65) {
-                cEngDeCrypted[i] = 91 - abs((cEng[i] - keyEng - 65)) % 26;
-            }
-            else {
-                cEngDeCrypted[i] = cEng[i] - keyEng;
-            }
-        }
-        else if (cEng[i] >= 97 && cEng[i] <= 122) {
-            if ((cEng[i] - keyEng) < 97) {
-                cEngDeCrypted[i] = 123 - abs((cEng[i] - keyEng - 97)) % 26;
-            }
-            else {
-                cEngDeCrypted[i] = cEng[i] - keyEng;
-            }
-        }
-        i++;
-    }
-    return cEngDeCrypted;
-}
 string Decrypt4(string m, string k) {
     string vig;
     for (int ind = 0; ind < m.length(); ind++) {
@@ -843,7 +801,6 @@ void EncryptCase(int keyoption, int numbofcyph, string& psw, string& psw_confirm
                 contwithstr = OpenNReadFile(contwithstr, path, go_out);
                 if (!go_out) {//if successfully
                     Encryption(contwithstr, key, numbofcyph);
-                    key = EncryptForKey(key);
                     string newpath = NewPath(1, path);//get new name and path to this new file from old one
                     const char* b = newpath.c_str(); //its for using autoopen function(system("") dont work with strings)
                     Ofstream(contwithstr, b, hashpsw, needkey, key, go_out, false);//false, because we are recording encrypted text
@@ -971,7 +928,6 @@ void DecryptCase(PswKeyText& pswkeytext, string& psw, string& psw_confirm, strin
                     }
                 }
                 if (!go_out && CheckPsw(hashpsw, pswkeytext.password)) {//if successfully
-                    pswkeytext.key = DecryptForKey(pswkeytext.key);
                     Decryption(pswkeytext.text, pswkeytext.key, numbofcyph);
                     string newpath = NewPath(2, path);//get new name and path to this new file from old one
                     const char* b = newpath.c_str(); //its for using autoopen function(system("") dont work with strings)
