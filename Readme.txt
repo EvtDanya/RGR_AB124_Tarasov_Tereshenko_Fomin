@@ -16,3 +16,5 @@
 04.05 - added the function of selecting the language and entering a password, some work with interface, but it didn't work out to remove goto everywhere
 02.05 - Added: Cipher selection menu, Language selection menu, operator switch-case(to select menu), some functions have been changed(Header, ChooseCypherMenu, ChooseLangMenu, MainMenu)
 29.04 - старт
+Пару слов о программе: 
+Для работы нужен путь к файлу, то есть должен быть файл с текстом для шифровки/расшифровки, при шифровке хэшируется пароль.
