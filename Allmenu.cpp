@@ -124,18 +124,18 @@ void MainMenu(int header) { //For printing the main menu
     cout << "All characters except English letters and numbers are ignored!\n";
     cout << "Press \"1\": \x1b[31mencryption\x1b[0m\n"; //output red text with construction \x1b[31m...\x1b[0m
     cout << "Press \"2\": \x1b[31mdecryption\x1b[0m\n"; //output red text
-    cout << "Файл для расшифровки получается путем шифрования сообщения\nчерез программу, так как пароль хэшируется, а ключ шифруется\n";
-    cout << "Шифруются английские буквы и цифры(не во всех шифрах)\n";
-    cout << "Сообщение может содержать несколько строк\n";
+    cout << "The decryption file is obtained by encrypting the message thro-\nugh the program, due to the password is hashed and the key is \nencrypted. ";
+    cout << "English letters and numbers are encrypted (not in \nall ciphers). ";
+    cout << "The message can contain several lines.\n";
     cout << "Press \"Esc\": \x1b[31mexit the programm\x1b[0m\n"; //output red text
     Separate();
 }
 void ChooseCypherMenu(int header) {//for printing the menu with choosing cyphers
     system("cls"); //clear the screen
     Header(header);
-    cout << "1 - Шифр Гронсфельда" << setw(30) << "4 - Шифр Виженера*\n";
-    cout << "2 - Тарабарская грамота" << setw(30) << "5 - Шифр XOR(Вернама)\n";
-    cout << "3 - Шифр Атбаша" << setw(33) << "6 - Азбука Морзе\n";
+    cout << "1 - Gronsfeld cipher" << setw(36) << "4 - The Vigener Cipher*\n";
+    cout << "2 - Tarabarskaya gramota" << setw(30) << "5 - The Vernam cipher\n";
+    cout << "3 - The Atbash cipher" << setw(26) << "6 - Morse Code\n";
     cout << "* lowercase letters become uppercase letters(for key too)\n";
     cout << "Press the cypher number or press \"Esc\" to return\n";
     Separate();
