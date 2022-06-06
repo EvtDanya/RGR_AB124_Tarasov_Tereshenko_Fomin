@@ -88,6 +88,11 @@ void OutputError(int numboferror) {
         _getch();//waiting for a key to be pressed
         break;
     }
+    case (11): {
+        cout << "Error! The password must be entered!\nPress any key to try again";
+        _getch();//waiting for a key to be pressed
+        break;
+    }
     default:
         break;
     };
@@ -138,7 +143,8 @@ void ChooseCypherMenu(int header) {//for printing the menu with choosing cyphers
 void EntryPswMenu1(int header) { //Menu for first enter of password
     system("cls"); //clear screen
     Header(header);
-    cout << "Please enter your password and press \"Enter\"\n";
+    cout << "The password will be saved in the encrypted file\n";
+    cout << "Enter the password and press \"Enter\"\n";
     cout << "You \x1b[31mcan only use\x1b[0m numbers and letters of the English alphabet\n";
     cout << "Press \"Backspace\" to delete symbols or press \"Esc\" to return\n";
     Separate();

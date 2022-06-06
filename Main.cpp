@@ -187,7 +187,8 @@ void DecryptCase(PswKeyText& pswkeytext, string& psw, string& psw_confirm, strin
             pswkeytext.text = GetPswKeyTextFromCont(contwithstr, pswkeytext.password, pswkeytext.key, go_out, needkey);
             if (!go_out) {//if successfully
                 string hashpsw;
-                for (auto attempts = 5; attempts > 0; attempts--) {
+                auto attempts = 5;
+                while (attempts > 0) {
                     psw = PswForDecr(psw, attempts, go_out, esc);
                     if (!psw.empty() && (!esc)) //if the string with password is not empty- continue
                     {
@@ -198,13 +199,17 @@ void DecryptCase(PswKeyText& pswkeytext, string& psw, string& psw_confirm, strin
                         }
                         else {
                             OutputError(10);
-                            continue;
                         }
                     }
-                    if (esc) { //if pressed escape- flag for returning
+                    else if (esc) { //if pressed escape- flag for returning
                         go_out = true;
                         break;
                     }
+                    else if (psw.empty()) {
+                        OutputError(11);
+                        continue;
+                    }
+                    attempts--;
                 }
                 if (!go_out && CheckPsw(hashpsw, pswkeytext.password)) {//if successfully
                     pswkeytext.key = DecryptForKey(pswkeytext.key);
