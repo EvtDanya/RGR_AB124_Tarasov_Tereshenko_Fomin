@@ -285,3 +285,46 @@ string Decrypt3(string cEng) {
     }
     return DeCrypted;
 }
+string EncryptForKey(string cEng) {
+    int key = 5;
+    string cEngCrypted = cEng;  //crypted text
+    int i = 0; //text position counter
+    while (cEngCrypted[i] != '\0') { //value substitution
+        if (cEng[i] >= 65 && cEng[i] <= 90) {
+            if ((cEng[i] + key) > 90) { cEngCrypted[i] = (cEng[i] + key) % 90 + 64; }
+            else { cEngCrypted[i] = cEng[i] + key; }
+        }
+        else {
+            if ((cEng[i] + key) > 122) { cEngCrypted[i] = (cEng[i] + key) % 122 + 96; }
+            else { cEngCrypted[i] = cEng[i] + key; }
+        }
+        i++;
+    }
+    return cEngCrypted;
+}
+string DecryptForKey(string cEng) {
+    int keyEng = 5;
+    string cEngDeCrypted = cEng;  //crypted text
+    int i = 0; //text position counter
+
+    while (cEngDeCrypted[i] != '\0') { //value substitution
+        if (cEng[i] >= 65 && cEng[i] <= 90) {
+            if ((cEng[i] - keyEng) < 65) {
+                cEngDeCrypted[i] = 91 - abs((cEng[i] - keyEng - 65)) % 26;
+            }
+            else {
+                cEngDeCrypted[i] = cEng[i] - keyEng;
+            }
+        }
+        else if (cEng[i] >= 97 && cEng[i] <= 122) {
+            if ((cEng[i] - keyEng) < 97) {
+                cEngDeCrypted[i] = 123 - abs((cEng[i] - keyEng - 97)) % 26;
+            }
+            else {
+                cEngDeCrypted[i] = cEng[i] - keyEng;
+            }
+        }
+        i++;
+    }
+    return cEngDeCrypted;
+}

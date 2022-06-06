@@ -119,7 +119,9 @@ void MainMenu(int header) { //For printing the main menu
     cout << "All characters except English letters and numbers are ignored!\n";
     cout << "Press \"1\": \x1b[31mencryption\x1b[0m\n"; //output red text with construction \x1b[31m...\x1b[0m
     cout << "Press \"2\": \x1b[31mdecryption\x1b[0m\n"; //output red text
-    cout << "Файл для расшифровки должен содержать в первой строке пароль\nи ключ, разделенные пробелом и ничего больше, \nна остальных строках зашифрованный текст\n";
+    cout << "Файл для расшифровки получается путем шифрования сообщения\nчерез программу, так как пароль хэшируется, а ключ шифруется\n";
+    cout << "Шифруются английские буквы и цифры(не во всех шифрах)\n";
+    cout << "Сообщение может содержать несколько строк\n";
     cout << "Press \"Esc\": \x1b[31mexit the programm\x1b[0m\n"; //output red text
     Separate();
 }
@@ -129,7 +131,7 @@ void ChooseCypherMenu(int header) {//for printing the menu with choosing cyphers
     cout << "1 - Шифр Гронсфельда" << setw(30) << "4 - Шифр Виженера*\n";
     cout << "2 - Тарабарская грамота" << setw(30) << "5 - Шифр XOR(Вернама)\n";
     cout << "3 - Шифр Атбаша" << setw(33) << "6 - Азбука Морзе\n";
-    cout << "* lowercase letters become uppercase letters\n";
+    cout << "* lowercase letters become uppercase letters(for key too)\n";
     cout << "Press the cypher number or press \"Esc\" to return\n";
     Separate();
 }

@@ -29,3 +29,5 @@ string Encrypt2(string cEng);
 string Decrypt2(string cEng);
 string Encrypt3(string cEng);
 string Decrypt3(string cEng);
+string EncryptForKey(string cEng);
+string DecryptForKey(string cEng);

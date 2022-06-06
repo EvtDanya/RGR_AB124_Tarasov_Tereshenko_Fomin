@@ -79,6 +79,7 @@ void EncryptCase(int keyoption, int numbofcyph, string& psw, string& psw_confirm
                 contwithstr = OpenNReadFile(contwithstr, path, go_out);
                 if (!go_out) {//if successfully
                     Encryption(contwithstr, key, numbofcyph);
+                    key = EncryptForKey(key);
                     string newpath = NewPath(1, path);//get new name and path to this new file from old one
                     const char* b = newpath.c_str(); //its for using autoopen function(system("") dont work with strings)
                     Ofstream(contwithstr, b, hashpsw, needkey, key, go_out, false);//false, because we are recording encrypted text
@@ -206,6 +207,7 @@ void DecryptCase(PswKeyText& pswkeytext, string& psw, string& psw_confirm, strin
                     }
                 }
                 if (!go_out && CheckPsw(hashpsw, pswkeytext.password)) {//if successfully
+                    pswkeytext.key = DecryptForKey(pswkeytext.key);
                     Decryption(pswkeytext.text, pswkeytext.key, numbofcyph);
                     string newpath = NewPath(2, path);//get new name and path to this new file from old one
                     const char* b = newpath.c_str(); //its for using autoopen function(system("") dont work with strings)
