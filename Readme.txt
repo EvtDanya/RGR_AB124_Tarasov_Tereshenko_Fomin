@@ -18,4 +18,4 @@
 02.05 - Added: Cipher selection menu, Language selection menu, operator switch-case(to select menu), some functions have been changed(Header, ChooseCypherMenu, ChooseLangMenu, MainMenu)
 29.04 - старт
 Пару слов о программе: 
-Для работы нужен путь к файлу, то есть должен быть файл с текстом для шифровки/расшифровки, при шифровке хэшируется пароль.
+Для работы нужен путь к файлу, то есть должен быть файл с текстом для шифровки/расшифровки, при шифровке хэшируется пароль(алгоритм sha256), а также шифруется ключ обычным Цезарем со смещением на 5 позиций. 
