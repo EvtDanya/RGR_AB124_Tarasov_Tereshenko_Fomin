@@ -135,8 +135,10 @@ void ChooseCypherMenu(int header) {//for printing the menu with choosing cyphers
     Header(header);
     cout << "1 - Gronsfeld cipher" << setw(36) << "4 - The Vigener Cipher*\n";
     cout << "2 - Tarabarskaya gramota" << setw(30) << "5 - The Vernam cipher\n";
-    cout << "3 - The Atbash cipher" << setw(26) << "6 - Morse Code\n";
+    cout << "3 - The Atbash cipher" << setw(28) << "6 - Morse Code**\n";
     cout << "* lowercase letters become uppercase letters(for key too)\n";
+    cout << "** some symbols are not readable, they are deleted, uppercase\n";
+    cout << "letters become lowercase\n";
     cout << "Press the cypher number or press \"Esc\" to return\n";
     Separate();
 }
