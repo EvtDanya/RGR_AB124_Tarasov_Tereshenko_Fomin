@@ -221,20 +221,10 @@ string Encrypt1(string cEng, string keyEng) {
     int i = 0, ii = 0; //Crypted position counter	
     while (Crypted[i] != '\0') { //value substitution		
         if (cEng[i] >= 65 && cEng[i] <= 90) {
-            if ((cEng[i] + (int)keyEng[ii] - 48) > 90) {
-                Crypted[i] = 64 + abs((cEng[i] + (int)keyEng[ii] - 48 - 90)) % 26;
-            }
-            else {
-                Crypted[i] = cEng[i] + (int)keyEng[ii] - 48;
-            }
+            Crypted[i] = 64 + abs((cEng[i] + (int)keyEng[ii] - 48 - 64)) % 26;
         }
         else if (cEng[i] >= 97 && cEng[i] <= 122) {
-            if ((cEng[i] + (int)keyEng[ii] - 48) > 122) {
-                Crypted[i] = 96 + abs((cEng[i] + (int)keyEng[ii] - 48 - 122)) % 26;
-            }
-            else {
-                Crypted[i] = cEng[i] + (int)keyEng[ii] - 48;
-            }
+            Crypted[i] = 96 + abs((cEng[i] + (int)keyEng[ii] - 48 - 96)) % 26;
         }
         ii++;
         i++;
@@ -247,20 +237,10 @@ string Decrypt1(string cEng, string keyEng) {
     int i = 0, ii = 0; //Crypted position counter	
     while (DeCrypted[i] != '\0') { //value substitution
         if (cEng[i] >= 65 && cEng[i] <= 90) {
-            if ((cEng[i] - (int)keyEng[ii] + 48) < 65) {
-                DeCrypted[i] = 91 - abs((cEng[i] - (int)keyEng[ii] + 48 - 65)) % 26;
-            }
-            else {
-                DeCrypted[i] = cEng[i] - (int)keyEng[ii] + 48;
-            }
+            DeCrypted[i] = 90 - abs((cEng[i] - (int)keyEng[ii] + 48 - 90)) % 26;
         }
         else if (cEng[i] >= 97 && cEng[i] <= 122) {
-            if ((cEng[i] - (int)keyEng[ii] + 48) < 97) {
-                DeCrypted[i] = 123 - abs((cEng[i] - (int)keyEng[ii] + 48 - 97)) % 26;
-            }
-            else {
-                DeCrypted[i] = cEng[i] - (int)keyEng[ii] + 48;
-            }
+            DeCrypted[i] = 122 - abs((cEng[i] - (int)keyEng[ii] + 48 - 122)) % 26;
         }
         ii++;
         i++;
@@ -305,8 +285,13 @@ string Decrypt2(string cEng) {
 string Encrypt3(string cEng) {
     string Crypted = cEng;  //DeCrypted Crypted
     int i = 0; //Crypted position counter		
-    while (Crypted[i] != '\0') { //value substitution			
-        Crypted[i] = cEng[cEng.length() - i - 1];
+    while (Crypted[i] != '\0') { //value substitution
+        if (cEng[i] >= 65 && cEng[i] <= 90) {
+            Crypted[i] = 90 - cEng[i] % 65;
+        }
+        if (cEng[i] >= 97 && cEng[i] <= 122) {
+            Crypted[i] = 122 - cEng[i] % 97;
+        }
         i++;
     }
     return Crypted;
@@ -315,8 +300,13 @@ string Decrypt3(string cEng) {
 
     string DeCrypted = cEng;  //DeCrypted Crypted
     int i = 0; //Crypted position counter		
-    while (DeCrypted[i] != '\0') { //value substitution			
-        DeCrypted[i] = cEng[cEng.length() - i - 1];
+    while (DeCrypted[i] != '\0') { //value substitution
+        if (cEng[i] >= 65 && cEng[i] <= 90) {
+            DeCrypted[i] = 90 - cEng[i] % 65;
+        }
+        if (cEng[i] >= 97 && cEng[i] <= 122) {
+            DeCrypted[i] = 122 - cEng[i] % 97;
+        }
         i++;
     }
     return DeCrypted;
