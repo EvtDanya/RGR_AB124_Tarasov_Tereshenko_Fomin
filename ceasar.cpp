@@ -17,8 +17,14 @@ string ceasarEng(string cEng, int keyEng) {
 			if ((cEng[i] + keyEng) > 122) { cEngCrypted[i] = (cEng[i] + keyEng) % 122 + 96; }
 			else { cEngCrypted[i] = cEng[i] + keyEng; }
 		}
+		else if (cEng[i] >= 48 && cEng[i] <= 57) {
+			if ((cEng[i] + keyEng) > 57) { cEngCrypted[i] = (cEng[i] + keyEng) % 57 + 48; }
+			else { cEngCrypted[i] = cEng[i] + keyEng; }
+		}
 		i++;
 	}
+	0 = 48 9 = 57
+
 	return cEngCrypted;
 }
 string DeceasarEng(string cEng, int keyEng) {
@@ -41,6 +47,11 @@ string DeceasarEng(string cEng, int keyEng) {
 			else {
 				cEngDeCrypted[i] = cEng[i] - keyEng;
 			}
+		}
+		else if (cEng[i] >= 48 && cEng[i] <= 57) {
+			if ((cEng[i] + keyEng) < 48) { 
+				cEngDeCrypted[i] = (cEng[i] + keyEng) % 57 + 48; }
+			else { cEngDeCrypted[i] = 58 - abs((cEng[i] - keyEng - 48))%10; }
 		}
 		i++;
 	}
